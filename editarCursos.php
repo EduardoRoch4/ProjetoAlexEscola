@@ -5,10 +5,10 @@ if ($coon->connect_error) {
     die("Erro de conexão: " . $coon->connect_error);
 }
 
-if (isset($_GET['id_professor'])) {
-    $id = $_GET['id_professor'];
+if (isset($_GET['id_curso'])) {
+    $id = $_GET['id_curso'];
 
-    $stmt = $coon->prepare("SELECT * FROM professores WHERE id_professor = ?");
+    $stmt = $coon->prepare("SELECT * FROM cursos WHERE id_curso = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -16,7 +16,7 @@ if (isset($_GET['id_professor'])) {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
     } else {
-        echo "<p style='text-align:center;color:red;'>Professor não encontrado!</p>";
+        echo "<p style='text-align:center;color:red;'>Curso não encontrado!</p>";
         exit;
     }
 } else {
@@ -29,31 +29,27 @@ if (isset($_GET['id_professor'])) {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Professor</title>
+    <title>Editar Curso</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <nav>
-            <a href="listarProfessores.php">Listar Professores</a>
-            <a href="formProfessores.html">Adicionar Professores</a>
+            <a href="listarAlunos.php">Listar Cursos</a>
+            <a href="formCursos.html">Adicionar Curso</a>
             <a href="index.html">Menu Principal</a>
-            
         </nav>
 
-        <h2>Editar Professor</h2>
+        <h2>Editar Curso</h2>
 
-        <form action="atualizarProfessores.php" method="POST">
-            <input type="hidden" name="id_professor" value="<?php echo $row['id_professor']; ?>">
+        <form action="atualizarCursos.php" method="POST">
+            <input type="hidden" name="id_curso" value="<?php echo $row['id_curso']; ?>">
 
             <label>Nome:</label>
             <input type="text" name="nome" value="<?php echo htmlspecialchars($row['nome']); ?>" required>
 
-            <label>Email:</label>
-            <input type="email" name="email" value="<?php echo htmlspecialchars($row['email']); ?>" required>
-
-            <label>Telefone:</label>
-            <input type="text" name="telefone" value="<?php echo htmlspecialchars($row['telefone']); ?>" required>
+            <label>Descrição:</label>
+            <input type="text" name="descricao" value="<?php echo $row['descricao']; ?>" required>
 
             <button type="submit">Atualizar</button>
         </form>

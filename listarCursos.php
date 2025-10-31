@@ -5,27 +5,30 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-$result = $conn->query("SELECT * FROM alunos");
+$result = $conn->query("SELECT * FROM cursos");
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Alunos</title>
+    <title>Lista de Cursos</title>
     <link rel="stylesheet" href="style.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
             padding: 20px;
         }
 
         .container {
             width: 90%;
             max-width: 1000px;
-            margin: 0 auto;
             background-color: #fff;
             padding: 30px;
             border-radius: 8px;
@@ -86,33 +89,31 @@ $result = $conn->query("SELECT * FROM alunos");
 </head>
 <body>
     <div class="container">
-        <h2>Lista de Alunos</h2>
+        <h2>Lista de Cursos</h2>
         <table>
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
-                <th>Data Nasc.</th>
-                <th>Email</th>
-                <th>Telefone</th>
+                <th>Descrição</th>
                 <th>Ações</th>
             </tr>
+
             <?php while ($row = $result->fetch_assoc()) { ?>
                 <tr>
-                    <td><?php echo $row['id_aluno']; ?></td>
+                    <td><?php echo $row['id_curso']; ?></td>
                     <td><?php echo $row['nome']; ?></td>
-                    <td><?php echo $row['data_nascimento']; ?></td>
-                    <td><?php echo $row['email']; ?></td>
-                    <td><?php echo $row['telefone']; ?></td>
+                    <td><?php echo $row['descricao']; ?></td>
                     <td>
-                        <a class="btn" href="editarAlunos.php?id_aluno=<?php echo $row['id_aluno']; ?>">Editar</a>
-                        <a class="btnExcluir" href="ExcluirAlunos.php?id_aluno=<?php echo $row['id_aluno']; ?>">Excluir</a>
+                        <a class="btn" href="editarCursos.php?id_curso=<?php echo $row['id_curso']; ?>">Editar</a>
+                        <a class="btnExcluir" href="excluirCursos.php?id_curso=<?php echo $row['id_curso']; ?>">Excluir</a>
+
                     </td>
                 </tr>
             <?php } ?>
         </table>
 
         <a class="menu-btn" href="index.html">Voltar ao Menu Principal</a>
-        <a class="menu-btn" href="formAlunos.html">Cadastrar Aluno</a>
+        <a class="menu-btn" href="formCursos.html">Cadastrar Curso</a>
     </div>
 </body>
 </html>

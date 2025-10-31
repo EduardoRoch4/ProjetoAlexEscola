@@ -106,12 +106,15 @@ $result = $conn->query("SELECT * FROM professores");
                     <td><?php echo $row['telefone']; ?></td>
                     <td>
                         <a class="btn" href="editarProfessores.php?id_professor=<?php echo $row['id_professor']; ?>">Editar</a>
+                        <a class="btnExcluir" href="ExcluirProfessores.php?id_professor=<?php echo $row['id_professor']; ?>">Excluir</a>
+
                     </td>
                 </tr>
             <?php } ?>
         </table>
 
         <a class="menu-btn" href="index.html">Voltar ao Menu Principal</a>
+        <a class="menu-btn" href="fomrProfessores.html">Cadastrar Professor</a>
     </div>
 </body>
 </html>
