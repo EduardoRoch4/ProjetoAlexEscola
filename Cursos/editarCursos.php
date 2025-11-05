@@ -30,7 +30,7 @@ if (isset($_GET['id_curso'])) {
 <head>
     <meta charset="UTF-8">
     <title>Editar Curso</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <div class="container">

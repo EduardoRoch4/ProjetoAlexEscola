@@ -5,21 +5,24 @@ if ($coon->connect_error) {
     die("Erro: " . $coon->connect_error);
 }
 
-$id = $_POST['id_aluno'];
+
+$id = $_POST['id_professor'];
 $nome = $_POST['nome'];
-$data_nasc = $_POST['data_nascimento'];
 $email = $_POST['email'];
 $telefone = $_POST['telefone'];
+$id_curso = $_POST['id_curso'];
 
-$stmt = $coon->prepare("UPDATE alunos SET nome=?, data_nascimento=?, email=?, telefone=? WHERE id_aluno=?");
-$stmt->bind_param("ssssi", $nome, $data_nasc, $email, $telefone, $id);
+$stmt = $coon->prepare("UPDATE professores SET nome=?, email=?, telefone=?, id_curso=? WHERE id_professor=?");
+$stmt->bind_param("sssii", $nome, $email, $telefone, $id_curso, $id);
 
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+        <link rel="stylesheet" href="../style.css">
+
 <head>
     <meta charset="UTF-8">
-    <title>Atualização de Aluno</title>
+    <title>Atualização de Professor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -63,14 +66,14 @@ $stmt->bind_param("ssssi", $nome, $data_nasc, $email, $telefone, $id);
     <div class="message-box">
         <?php
         if ($stmt->execute()) {
-            echo "<h2>Dados do aluno atualizados com sucesso!</h2>";
+            echo "<h2>Dados do professor atualizados com sucesso!</h2>";
         } else {
             echo "<h2 class='error'>Erro ao atualizar: " . $stmt->error . "</h2>";
         }
         ?>
-        <a href="listarAlunos.php">Voltar para Lista de Alunos</a>
+        <a href="listarProfessores.php">Voltar para Lista de Professores</a>
         <br><br>
-        <a href="index.html">Menu Principal</a>
+        <a href="../index.html">Menu Principal</a>
     </div>
 </body>
 </html>

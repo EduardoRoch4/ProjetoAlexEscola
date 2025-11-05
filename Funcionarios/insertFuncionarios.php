@@ -1,20 +1,32 @@
 <?php
+$nome = $_POST['nome'];
+$email = $_POST['email'];
+$telefone = $_POST['telefone'];
+$cargo = $_POST['cargo'];
+
 $coon = new mysqli("localhost", "root", "", "escola");
 
 if ($coon->connect_error) {
-    die("Erro: " . $coon->connect_error);
+  die("Erro de conexão: " . $coon->connect_error);
 }
 
-$id = $_GET['id_professor'];
+$stmt = $coon->prepare("INSERT INTO funcionarios (nome, email, telefone, cargo) VALUES (?, ?, ?, ?)");
+$stmt->bind_param("ssss", $nome, $email, $telefone, $cargo);
 
-$stmt = $coon->prepare("DELETE FROM professores WHERE id_professor = ?");
-$stmt->bind_param("i", $id);
+// Executa só uma vez e salva o resultado
+$resultado = $stmt->execute();
+
+$stmt->close();
+$coon->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+      <link rel="stylesheet" href="../style.css">
+
 <head>
     <meta charset="UTF-8">
-    <title>Exclusão de Professor</title>
+    <title>Cadastro de Funcionarios</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,11 +44,8 @@ $stmt->bind_param("i", $id);
             max-width: 500px;
         }
         h2 {
-            color: #dc3545;
-            margin-bottom: 20px;
-        }
-        .success {
             color: #28a745;
+            margin-bottom: 20px;
         }
         .error {
             color: #dc3545;
@@ -60,20 +69,15 @@ $stmt->bind_param("i", $id);
 <body>
     <div class="message-box">
         <?php
-        if ($stmt->execute()) {
-            echo "<h2 class='success'>Professor excluído com sucesso!</h2>";
+        if ($resultado) {
+            echo "<h2>Funcionario cadastrado com sucesso!</h2>";
         } else {
-            echo "<h2 class='error'>Erro ao excluir: " . $stmt->error . "</h2>";
+            echo "<h2 class='error'>Erro ao cadastrar!</h2>";
         }
         ?>
-        <a href="listarAlunos.php">Voltar para Lista de Professores</a>
+        <a href="listarFuncionarios.php">Voltar para Lista de Funcionarios</a>
         <br><br>
-        <a href="index.html">Menu Principal</a>
+        <a href="../index.html">Menu Principal</a>
     </div>
 </body>
 </html>
-
-<?php
-$stmt->close();
-$coon->close();
-?>

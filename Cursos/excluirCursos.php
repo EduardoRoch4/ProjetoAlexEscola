@@ -5,19 +5,21 @@ if ($coon->connect_error) {
     die("Erro: " . $coon->connect_error);
 }
 
-$id = $_POST['id_curso'];
-$nome = $_POST['nome'];
-$descricao = $_POST['descricao'];
+$id = $_GET['id_curso'];
 
-// Corrigido: substituído 'email' por 'descricao'
-$stmt = $coon->prepare("UPDATE cursos SET nome=?, descricao=? WHERE id_curso=?");
-$stmt->bind_param("ssi", $nome, $descricao, $id);
+
+
+// Agora exclui o curso
+$stmt = $coon->prepare("DELETE FROM cursos WHERE id_curso = ?");
+$stmt->bind_param("i", $id);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+        <link rel="stylesheet" href="../style.css">
+
 <head>
     <meta charset="UTF-8">
-    <title>Atualização de Curso</title>
+    <title>Exclusão de Cursos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,8 +37,10 @@ $stmt->bind_param("ssi", $nome, $descricao, $id);
             max-width: 500px;
         }
         h2 {
-            color: #28a745;
             margin-bottom: 20px;
+        }
+        .success {
+            color: #28a745;
         }
         .error {
             color: #dc3545;
@@ -61,9 +65,9 @@ $stmt->bind_param("ssi", $nome, $descricao, $id);
     <div class="message-box">
         <?php
         if ($stmt->execute()) {
-            echo "<h2>Dados do curso atualizados com sucesso!</h2>";
+            echo "<h2 class='success'>Curso excluído com sucesso!</h2>";
         } else {
-            echo "<h2 class='error'>Erro ao atualizar: " . $stmt->error . "</h2>";
+            echo "<h2 class='error'>Erro ao excluir: " . $stmt->error . "</h2>";
         }
         ?>
         <a href="listarCursos.php">Voltar para Lista de Cursos</a>

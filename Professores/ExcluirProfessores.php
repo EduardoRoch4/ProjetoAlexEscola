@@ -1,40 +1,33 @@
 <?php
-// Exclusão de aluno com remoção das associações em alunos_materias
+$coon = new mysqli("localhost", "root", "", "escola");
+
 $msg = '';
 $msgClass = '';
 
-$coon = new mysqli("localhost", "root", "", "escola");
 if ($coon->connect_error) {
     $msg = 'Erro de conexão: ' . $coon->connect_error;
     $msgClass = 'error';
 } else {
-    if (!isset($_GET['id_aluno'])) {
-        $msg = 'ID do aluno não especificado.';
+    if (!isset($_GET['id_professor'])) {
+        $msg = 'ID do professor não especificado.';
         $msgClass = 'error';
     } else {
-        $id = (int) $_GET['id_aluno'];
+        $id = (int) $_GET['id_professor'];
         $coon->begin_transaction();
         try {
-            // Exclui relações em alunos_materias primeiro
-            $stmt = $coon->prepare('DELETE FROM alunos_materias WHERE id_aluno = ?');
-            if ($stmt === false) throw new Exception('Falha ao preparar exclusão em alunos_materias: ' . $coon->error);
+            // Exclui o professor
+            $stmt = $coon->prepare('DELETE FROM professores WHERE id_professor = ?');
+            if ($stmt === false) throw new Exception('Falha ao preparar exclusão em professores: ' . $coon->error);
             $stmt->bind_param('i', $id);
-            if (!$stmt->execute()) throw new Exception('Erro ao excluir em alunos_materias: ' . $stmt->error);
-            $stmt->close();
-
-            // Agora exclui o aluno
-            $stmt = $coon->prepare('DELETE FROM alunos WHERE id_aluno = ?');
-            if ($stmt === false) throw new Exception('Falha ao preparar exclusão em alunos: ' . $coon->error);
-            $stmt->bind_param('i', $id);
-            if (!$stmt->execute()) throw new Exception('Erro ao excluir aluno: ' . $stmt->error);
+            if (!$stmt->execute()) throw new Exception('Erro ao excluir professor: ' . $stmt->error);
             $stmt->close();
 
             $coon->commit();
-            $msg = 'Aluno excluído com sucesso!';
+            $msg = 'Professor excluído com sucesso!';
             $msgClass = 'success';
         } catch (Exception $e) {
             $coon->rollback();
-            $msg = 'Erro ao excluir aluno (transação revertida): ' . $e->getMessage();
+            $msg = 'Erro ao excluir professor (transação revertida): ' . $e->getMessage();
             $msgClass = 'error';
         }
     }
@@ -45,7 +38,7 @@ if ($coon->connect_error) {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Exclusão de Aluno</title>
+    <title>Exclusão de Professor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -82,9 +75,9 @@ if ($coon->connect_error) {
 <body>
     <div class="message-box <?php echo $msgClass; ?>">
         <h2><?php echo htmlspecialchars($msg); ?></h2>
-        <a href="listarAlunos.php">Voltar para Lista de Alunos</a>
+        <a href="listarProfessores.php">Voltar para Lista de Professores</a>
         <br><br>
-        <a href="index.html">Menu Principal</a>
+        <a href="../index.html">Menu Principal</a>
     </div>
 </body>
 </html>

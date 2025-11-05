@@ -1,24 +1,30 @@
 <?php
+$nome = $_POST['nome'];
+$descricao = $_POST['descricao'];
+
 $coon = new mysqli("localhost", "root", "", "escola");
 
 if ($coon->connect_error) {
-    die("Erro: " . $coon->connect_error);
-}
+  die("Erro de conexão: " . $coon->connect_error);
+} 
 
-$id = $_POST['id_professor'];
-$nome = $_POST['nome'];
-$email = $_POST['email'];
-$telefone = $_POST['telefone'];
+$stmt = $coon->prepare("INSERT INTO cursos (nome, descricao) VALUES (?, ?)");
+$stmt->bind_param("ss", $nome, $descricao);
 
-$stmt = $coon->prepare("UPDATE professores SET nome=?, email=?, telefone=? WHERE id_professor=?");
-$stmt->bind_param("sssi", $nome, $email, $telefone, $id);
+// Executa só uma vez
+$resultado = $stmt->execute();
 
+$stmt->close();
+$coon->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+      <link rel="stylesheet" href="../style.css">
+
 <head>
     <meta charset="UTF-8">
-    <title>Atualização de Professor</title>
+    <title>Cadastro de Curso</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,20 +67,15 @@ $stmt->bind_param("sssi", $nome, $email, $telefone, $id);
 <body>
     <div class="message-box">
         <?php
-        if ($stmt->execute()) {
-            echo "<h2>Dados do professor atualizados com sucesso!</h2>";
+        if ($resultado) {
+            echo "<h2>Curso cadastrado com sucesso!</h2>";
         } else {
-            echo "<h2 class='error'>Erro ao atualizar: " . $stmt->error . "</h2>";
+            echo "<h2 class='error'>Erro ao cadastrar!</h2>";
         }
         ?>
-        <a href="listarProfessores.php">Voltar para Lista de Professores</a>
+        <a href="listarCursos.php">Voltar para Lista de Cursos</a>
         <br><br>
         <a href="index.html">Menu Principal</a>
     </div>
 </body>
 </html>
-
-<?php
-$stmt->close();
-$coon->close();
-?>

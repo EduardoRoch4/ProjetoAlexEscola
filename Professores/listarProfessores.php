@@ -5,16 +5,25 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-$result = $conn->query("SELECT * FROM professores");
+$result = $conn->query("SELECT professores.*, cursos.nome AS nome_curso FROM professores LEFT JOIN cursos ON professores.id_curso = cursos.id_curso");
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+<link rel="stylesheet" href="../style.css">
+
 <head>
     <meta charset="UTF-8">
     <title>Lista de Professores</title>
-    <link rel="stylesheet" href="style.css">
     <style>
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            /* Um em cima do outro */
+            gap: 6px;
+            /* Espaço entre eles */
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -31,7 +40,7 @@ $result = $conn->query("SELECT * FROM professores");
             background-color: #fff;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
@@ -45,7 +54,8 @@ $result = $conn->query("SELECT * FROM professores");
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -64,9 +74,10 @@ $result = $conn->query("SELECT * FROM professores");
             text-decoration: none;
             color: #fff;
             background-color: #28a745;
-            padding: 5px 10px;
+            padding: 6px 10px;
             border-radius: 5px;
-            margin-right: 5px;
+            text-align: center;
+            font-weight: bold;
         }
 
         .menu-btn {
@@ -86,6 +97,7 @@ $result = $conn->query("SELECT * FROM professores");
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>Lista de Professores</h2>
@@ -95,6 +107,7 @@ $result = $conn->query("SELECT * FROM professores");
                 <th>Nome</th>
                 <th>Email</th>
                 <th>Telefone</th>
+                <th>Curso</th>
                 <th>Ações</th>
             </tr>
 
@@ -104,17 +117,20 @@ $result = $conn->query("SELECT * FROM professores");
                     <td><?php echo $row['nome']; ?></td>
                     <td><?php echo $row['email']; ?></td>
                     <td><?php echo $row['telefone']; ?></td>
+                    <td><?php echo htmlspecialchars($row['nome_curso'] ?? '—'); ?></td>
                     <td>
-                        <a class="btn" href="editarProfessores.php?id_professor=<?php echo $row['id_professor']; ?>">Editar</a>
-                        <a class="btnExcluir" href="ExcluirProfessores.php?id_professor=<?php echo $row['id_professor']; ?>">Excluir</a>
-
+                        <div class="action-buttons">
+                            <a class="btn" href="editarProfessores.php?id_professor=<?= $row['id_professor']; ?>">Editar</a>
+                            <a class="btnExcluir" href="ExcluirProfessores.php?id_professor=<?= $row['id_professor']; ?>">Excluir</a>
+                        </div>
                     </td>
                 </tr>
             <?php } ?>
         </table>
 
-        <a class="menu-btn" href="index.html">Voltar ao Menu Principal</a>
-        <a class="menu-btn" href="fomrProfessores.html">Cadastrar Professor</a>
+        <a class="menu-btn" href="../index.html">Voltar ao Menu Principal</a>
+        <a class="menu-btn" href="formProfessores.php">Cadastrar Professor</a>
     </div>
 </body>
+
 </html>

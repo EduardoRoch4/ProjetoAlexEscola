@@ -10,11 +10,11 @@ $result = $conn->query("SELECT * FROM cursos");
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+        <link rel="stylesheet" href="../style.css">
+
 <head>
     <meta charset="UTF-8">
     <title>Lista de Cursos</title>
-    <link rel="stylesheet" href="style.css">
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -104,15 +104,17 @@ $result = $conn->query("SELECT * FROM cursos");
                     <td><?php echo $row['nome']; ?></td>
                     <td><?php echo $row['descricao']; ?></td>
                     <td>
-                        <a class="btn" href="editarCursos.php?id_curso=<?php echo $row['id_curso']; ?>">Editar</a>
-                        <a class="btnExcluir" href="excluirCursos.php?id_curso=<?php echo $row['id_curso']; ?>">Excluir</a>
-
+                        <div class="action-buttons">
+                            <?php $cursoId = isset($row['id_curso']) ? intval($row['id_curso']) : ''; ?>
+                            <a class="btn" href="editarCursos.php?id_curso=<?php echo $cursoId; ?>">Editar</a>
+                            <a class="btnExcluir" href="excluirCursos.php?id_curso=<?php echo $cursoId; ?>" onclick="return confirm('Tem certeza que deseja excluir este curso?');">Excluir</a>
+                        </div>
                     </td>
                 </tr>
             <?php } ?>
         </table>
 
-        <a class="menu-btn" href="index.html">Voltar ao Menu Principal</a>
+        <a class="menu-btn" href="../index.html">Voltar ao Menu Principal</a>
         <a class="menu-btn" href="formCursos.html">Cadastrar Curso</a>
     </div>
 </body>

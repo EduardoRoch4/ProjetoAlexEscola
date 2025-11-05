@@ -27,17 +27,19 @@ if (isset($_GET['id_aluno'])) {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+        <link rel="stylesheet" href="../style.css">
+
 <head>
     <meta charset="UTF-8">
     <title>Editar Aluno</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <div class="container">
         <nav>
             <a href="listarAlunos.php">Listar Alunos</a>
-            <a href="formAlunos.html">Adicionar Alunos</a>
-            <a href="index.html">Menu Principal</a>
+            <a href="formAlunos.php">Adicionar Alunos</a>
+            <a href="/ProjetoAlexEscola/index.html">Menu Principal</a>
         </nav>
 
         <h2>Editar Aluno</h2>
@@ -49,16 +51,22 @@ if (isset($_GET['id_aluno'])) {
             <input type="text" name="nome" value="<?php echo htmlspecialchars($row['nome']); ?>" required>
 
             <label>Data de Nascimento:</label>
-            <input type="date" name="data_nascimento" value="<?php echo $row['data_nascimento']; ?>" required>
+            <input type="date" name="data_nascimento" id="data_nascimento" value="<?php echo $row['data_nascimento']; ?>" required>
+
 
             <label>Email:</label>
-            <input type="email" name="email" value="<?php echo htmlspecialchars($row['email']); ?>" required>
+            <input type="email" name="email" required pattern="^[^@]+@[^@]+\.[a-zA-Z]{2,}$" title="Digite um email válido (ex: usuario@dominio.com)">
 
             <label>Telefone:</label>
-            <input type="text" name="telefone" value="<?php echo htmlspecialchars($row['telefone']); ?>" required>
+            <input type="text" name="telefone" maxlength="11" pattern="[0-9]{11}" required>
 
             <button type="submit">Atualizar</button>
         </form>
     </div>
 </body>
 </html>
+
+<script>
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("data_nascimento").setAttribute("max", today);
+</script>

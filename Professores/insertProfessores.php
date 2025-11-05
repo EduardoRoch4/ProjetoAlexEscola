@@ -1,27 +1,34 @@
 <?php
+
+$nome = $_POST['nome'];
+$email = $_POST['email'];
+$telefone = $_POST['telefone'];
+$id_curso = $_POST['id_curso'];
+
 $coon = new mysqli("localhost", "root", "", "escola");
 
 if ($coon->connect_error) {
-    die("Erro: " . $coon->connect_error);
+  die("Erro de conexão: " . $coon->connect_error);
 }
 
-$id = $_GET['id_curso'];
 
-// Primeiro exclui as matérias relacionadas ao curso
-$deleteMaterias = $coon->prepare("DELETE FROM materias WHERE id_curso = ?");
-$deleteMaterias->bind_param("i", $id);
-$deleteMaterias->execute();
-$deleteMaterias->close();
+$stmt = $coon->prepare("INSERT INTO professores (nome, email, telefone, id_curso) VALUES (?, ?, ?, ?)");
+$stmt->bind_param("sssi", $nome, $email, $telefone, $id_curso);
 
-// Agora exclui o curso
-$stmt = $coon->prepare("DELETE FROM cursos WHERE id_curso = ?");
-$stmt->bind_param("i", $id);
+// Executa só uma vez e salva o resultado
+$resultado = $stmt->execute();
+
+$stmt->close();
+$coon->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+      <link rel="stylesheet" href="../style.css">
+
 <head>
     <meta charset="UTF-8">
-    <title>Exclusão de Cursos</title>
+    <title>Cadastro de Professor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,10 +46,8 @@ $stmt->bind_param("i", $id);
             max-width: 500px;
         }
         h2 {
-            margin-bottom: 20px;
-        }
-        .success {
             color: #28a745;
+            margin-bottom: 20px;
         }
         .error {
             color: #dc3545;
@@ -66,20 +71,15 @@ $stmt->bind_param("i", $id);
 <body>
     <div class="message-box">
         <?php
-        if ($stmt->execute()) {
-            echo "<h2 class='success'>Curso excluído com sucesso!</h2>";
+        if ($resultado) {
+            echo "<h2>Professor cadastrado com sucesso!</h2>";
         } else {
-            echo "<h2 class='error'>Erro ao excluir: " . $stmt->error . "</h2>";
+            echo "<h2 class='error'>Erro ao cadastrar!</h2>";
         }
         ?>
-        <a href="listarCursos.php">Voltar para Lista de Cursos</a>
+        <a href="listarProfessores.php">Voltar para Lista de Professores</a>
         <br><br>
-        <a href="index.html">Menu Principal</a>
+        <a href="../index.html">Menu Principal</a>
     </div>
 </body>
 </html>
-
-<?php
-$stmt->close();
-$coon->close();
-?>
