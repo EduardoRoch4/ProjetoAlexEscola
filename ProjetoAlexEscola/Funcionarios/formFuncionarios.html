@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Funcionario</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="listarFuncionarios.php">Listar Funcionario</a>
+      <a href="../index.html">Menu Principal</a>
+    </nav>
+
+    <h2>Cadastro de Funcionario</h2>
+    <form action="insertFuncionarios.php" method="POST">
+      <label>Nome:</label>
+      <input type="text" name="nome" required>
+
+      <label>Email:</label>
+      <input type="email" name="email" required pattern="^[^@]+@[^@]+\.[a-zA-Z]{2,}$" title="Digite um email válido (ex: usuario@dominio.com)">
+
+      <label>Telefone:</label>
+      <input type="text" name="telefone" maxlength="11" pattern="[0-9]{11}" required>
+
+      <label>Cargo:</label>
+      <input type="text" name="cargo" required>
+            
+      <button type="submit">Cadastrar</button>
+      </form>
+  </div>
+</body>
+</html>
